@@ -11,6 +11,6 @@ namespace ManjaApp.Data.Entities
     {
         public string ProfilePicURL { get; set; }
         public virtual ICollection<Manja>? Manjas { get; set; }
-        public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<Comment>? Comments { get; set; }
     }
 }

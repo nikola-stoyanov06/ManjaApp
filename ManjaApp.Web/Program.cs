@@ -1,4 +1,4 @@
-using ManjaApp.Web.Data;
+using ManjaApp.Data.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

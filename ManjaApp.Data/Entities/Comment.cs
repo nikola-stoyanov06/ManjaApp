@@ -9,8 +9,8 @@ namespace ManjaApp.Data.Entities
 {
     public class Comment : BaseEntity
     {
-        public AppUser User { get; set; }
-        public Manja Manja { get; set; }
+        public AppUser? User { get; set; }
+        public Manja? Manja { get; set; }
         public string Content { get; set; }
         public int Rating { get; set; }
     }

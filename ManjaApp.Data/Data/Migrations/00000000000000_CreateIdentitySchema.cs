@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 
-namespace ManjaApp.Web.Data.Migrations
+namespace ManjaApp.Data.Data.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {
