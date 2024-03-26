@@ -10,7 +10,7 @@ namespace ManjaApp.Data.Entities
     public class AppUser : IdentityUser
     {
         public string ProfilePicURL { get; set; }
-        public ICollection<Manja>? Manjas { get; set; }
-        public ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<Manja>? Manjas { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
     }
 }

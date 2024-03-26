@@ -10,8 +10,8 @@ namespace ManjaApp.Data.Entities
         public ICollection<ManjaIngredient>? Ingredients { get; set; }
         public string Instructions { get; set; }
         public List<string>? Pictures { get; set; }
-        public ICollection<Comment>? Comments { get; set; }
+        public virtual ICollection<Comment>? Comments { get; set; }
         public Category Category { get; set; }
-        public double Rating { get; set; }
+        public virtual double Rating { get; set; }
     }
 }

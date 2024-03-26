@@ -10,6 +10,6 @@ namespace ManjaApp.Data.Entities
     public class Category : BaseEntity
     {
         public string Title { get; set; }
-        public ICollection<Manja> Manjas { get; set; }
+        public virtual ICollection<Manja> Manjas { get; set; }
     }
 }
