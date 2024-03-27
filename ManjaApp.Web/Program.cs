@@ -1,6 +1,10 @@
 using ManjaApp.Data.Data;
+using ManjaApp.Data.Repositories;
+using ManjaApp.Data.Repositories.Abstractions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Services;
+using Services.Abstractions;
 
 namespace ManjaApp.Web
 {
@@ -19,6 +23,8 @@ namespace ManjaApp.Web
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
+            builder.Services.AddTransient(typeof(ICrudRepository<>), typeof(CrudRepository<>));
+            builder.Services.AddTransient<IManjaService, ManjaService>();
 
             var app = builder.Build();
 

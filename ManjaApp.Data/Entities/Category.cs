@@ -9,6 +9,10 @@ namespace ManjaApp.Data.Entities
 {
     public class Category : BaseEntity
     {
+        public Category()
+        {
+            Manjas = new HashSet<Manja>();
+        }
         public string Title { get; set; }
         public virtual ICollection<Manja>? Manjas { get; set; }
     }
