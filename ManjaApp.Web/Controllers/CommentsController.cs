@@ -8,27 +8,27 @@ using Microsoft.EntityFrameworkCore;
 using ManjaApp.Data.Data;
 using ManjaApp.Data.Entities;
 using Services.Abstractions;
+using Services;
 using Services.DTOs;
-using ManjaApp.Web.Models;
 
 namespace ManjaApp.Web.Controllers
 {
-    public class ManjasController : Controller
+    public class CommentsController : Controller
     {
-        private readonly IManjaService _manjaService;
-        
-        public ManjasController(IManjaService manjaService)
+        private readonly ICommentService _commentService;
+
+        public CommentsController(ICommentService commentService)
         {
-            _manjaService = manjaService;
+            _commentService = commentService;
         }
 
-        // GET: Manjas
+        // GET: Comments
         public async Task<IActionResult> Index()
         {
-            return View(await _manjaService.GetManjasAsync());
+            return View(await _commentService.GetCommentsAsync());
         }
 
-        // GET: Manjas/Details/5
+        // GET: Comments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -36,39 +36,37 @@ namespace ManjaApp.Web.Controllers
                 return NotFound();
             }
 
-            var manja = await _manjaService.GetManjaByIdAsync(id.Value);
-            if (manja == null)
+            var comment = await _commentService.GetCommentByIdAsync(id.Value);
+            if (comment == null)
             {
                 return NotFound();
             }
 
-            return View(manja);
+            return View(comment);
         }
 
-        // GET: Manjas/Create
+        // GET: Comments/Create
         public IActionResult Create()
-        { 
+        {
             return View();
         }
-        
 
-        // POST: Manjas/Create
+        // POST: Comments/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ManjaCreateEditDTO manja)
+        public async Task<IActionResult> Create([Bind("Content,Rating,Id")] CommentDTO comment)
         {
             if (ModelState.IsValid)
             {
-                await _manjaService.AddManjaAsync(manja);
+                await _commentService.AddCommentAsync(comment);
                 return RedirectToAction(nameof(Index));
             }
-            return View(manja);
+            return View(comment);
         }
 
-
-        // GET: Manjas/Edit/5
+        // GET: Comments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -76,22 +74,22 @@ namespace ManjaApp.Web.Controllers
                 return NotFound();
             }
 
-            var manja = await _manjaService.GetManjaByIdAsync(id.Value);
-            if (manja == null)
+            var comment = await _commentService.GetCommentByIdAsync(id.Value);
+            if (comment == null)
             {
                 return NotFound();
             }
-            return View(manja);
+            return View(comment);
         }
 
-        // POST: Manjas/Edit/5
+        // POST: Comments/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, ManjaCreateEditDTO manja)
+        public async Task<IActionResult> Edit(int id, [Bind("Content,Rating,Id")] CommentDTO comment)
         {
-            if (id != manja.Id)
+            if (id != comment.Id)
             {
                 return NotFound();
             }
@@ -100,11 +98,11 @@ namespace ManjaApp.Web.Controllers
             {
                 try
                 {
-                    await _manjaService.UpdateManjaAsync(manja);
+                    await _commentService.UpdateCommentAsync(comment);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!await ManjaExists(manja.Id))
+                    if (!await CommentExists(comment.Id))
                     {
                         return NotFound();
                     }
@@ -115,10 +113,10 @@ namespace ManjaApp.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(manja);
+            return View(comment);
         }
 
-        // GET: Manjas/Delete/5
+        // GET: Comments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -126,34 +124,28 @@ namespace ManjaApp.Web.Controllers
                 return NotFound();
             }
 
-            var manja = await _manjaService.GetManjaByIdAsync(id.Value);
-            if (manja == null)
+            var comment = await _commentService.GetCommentByIdAsync(id.Value);
+            if (comment == null)
             {
                 return NotFound();
             }
 
-            return View(manja);
+            return View(comment);
         }
 
-        // POST: Manjas/Delete/5
+        // POST: Comments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            
-            var manja = await _manjaService.GetManjaByIdAsync(id);
-            if (manja != null)
-            {
-                await _manjaService.DeleteManjaByIdAsync(id);
-            }
-            
+            await _commentService.DeleteCommentByIdAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
-        private async Task<bool> ManjaExists(int id)
+        private async Task<bool> CommentExists(int id)
         {
-            var manja = await _manjaService.GetManjaByIdAsync(id);
-            return manja != null;
+            var comment = await _commentService.GetCommentByIdAsync(id);
+            return comment != null;
         }
     }
 }

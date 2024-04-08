@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManjaApp.Data.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240327141355_CreateSchema")]
+    [Migration("20240408194634_CreateSchema")]
     partial class CreateSchema
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace ManjaApp.Data.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "7.0.17")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -80,11 +80,23 @@ namespace ManjaApp.Data.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<double>("Amount")
+                        .HasColumnType("float");
+
+                    b.Property<int?>("ManjaId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ManjaId");
 
                     b.ToTable("Ingredients");
                 });
@@ -107,8 +119,9 @@ namespace ManjaApp.Data.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Rating")
-                        .HasColumnType("float");
+                    b.Property<string>("Picture")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -124,58 +137,6 @@ namespace ManjaApp.Data.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Manjas");
-                });
-
-            modelBuilder.Entity("ManjaApp.Data.Entities.ManjaIngredient", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<double>("Amount")
-                        .HasColumnType("float");
-
-                    b.Property<int?>("IngredientId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ManjaId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Unit")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IngredientId");
-
-                    b.HasIndex("ManjaId");
-
-                    b.ToTable("ManjaIngredients");
-                });
-
-            modelBuilder.Entity("ManjaApp.Data.Entities.ManjaPictures", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ManjaId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PictureURL")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ManjaId");
-
-                    b.ToTable("ManjaPictures");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -331,12 +292,10 @@ namespace ManjaApp.Data.Data.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -373,12 +332,10 @@ namespace ManjaApp.Data.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -414,6 +371,15 @@ namespace ManjaApp.Data.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("ManjaApp.Data.Entities.Ingredient", b =>
+                {
+                    b.HasOne("ManjaApp.Data.Entities.Manja", "Manja")
+                        .WithMany("Ingredients")
+                        .HasForeignKey("ManjaId");
+
+                    b.Navigation("Manja");
+                });
+
             modelBuilder.Entity("ManjaApp.Data.Entities.Manja", b =>
                 {
                     b.HasOne("ManjaApp.Data.Entities.Category", "Category")
@@ -427,30 +393,6 @@ namespace ManjaApp.Data.Data.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ManjaApp.Data.Entities.ManjaIngredient", b =>
-                {
-                    b.HasOne("ManjaApp.Data.Entities.Ingredient", "Ingredient")
-                        .WithMany()
-                        .HasForeignKey("IngredientId");
-
-                    b.HasOne("ManjaApp.Data.Entities.Manja", "Manja")
-                        .WithMany("Ingredients")
-                        .HasForeignKey("ManjaId");
-
-                    b.Navigation("Ingredient");
-
-                    b.Navigation("Manja");
-                });
-
-            modelBuilder.Entity("ManjaApp.Data.Entities.ManjaPictures", b =>
-                {
-                    b.HasOne("ManjaApp.Data.Entities.Manja", "Manja")
-                        .WithMany("Pictures")
-                        .HasForeignKey("ManjaId");
-
-                    b.Navigation("Manja");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -514,8 +456,6 @@ namespace ManjaApp.Data.Data.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("Ingredients");
-
-                    b.Navigation("Pictures");
                 });
 
             modelBuilder.Entity("ManjaApp.Data.Entities.AppUser", b =>

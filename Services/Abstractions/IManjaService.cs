@@ -1,4 +1,5 @@
 ﻿using ManjaApp.Data.Entities;
+using Services.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,12 @@ namespace Services.Abstractions
 {
     public interface IManjaService
     {
-        Task<List<Manja>> GetManjasAsync();
-        Task<Manja> GetManjaByIdAsync(int id);
-        Task<List<Manja>> GetManjasByNameAsync(string name);
-        Task AddManjaAsync (Manja manja);
+        Task<List<ManjaDTO>> GetManjasAsync();
+        Task<ManjaDTO> GetManjaByIdAsync(int id);
+        Task<ManjaCreateEditDTO> GetManjaByIdEditAsync(int id);
+        Task<List<ManjaDTO>> GetManjasByNameAsync(string name);
+        Task AddManjaAsync (ManjaCreateEditDTO model);
         Task DeleteManjaByIdAsync (int id);
-        Task UpdateManjaAsync(Manja manja);
+        Task UpdateManjaAsync(ManjaCreateEditDTO model);
     }
 }

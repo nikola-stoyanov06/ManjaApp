@@ -1,4 +1,4 @@
-﻿@model ManjaApp.Data.Entities.Manja
+﻿@model Services.DTOs.ManjaDTO
 
 @{
     ViewData["Title"] = "Details";
@@ -28,12 +28,14 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Instructions)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Rating)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Picture)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Rating)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Picture)
         </dd>
+        <button onclick="location.href='@Url.Action("Create", "Comments")'">Add Comment</button>
+        
     </dl>
 </div>
 <div>

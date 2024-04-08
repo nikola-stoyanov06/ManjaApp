@@ -20,8 +20,6 @@ namespace ManjaApp.Data.Data
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<Manja> Manjas { get; set; }
-        public DbSet<ManjaIngredient> ManjaIngredients { get; set; }
-        public DbSet<ManjaPictures> Pictures { get; set; }
     }
     public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
     {
