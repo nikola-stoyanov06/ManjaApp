@@ -10,16 +10,18 @@ using ManjaApp.Data.Entities;
 using Services.Abstractions;
 using Services.DTOs;
 using ManjaApp.Web.Models;
+using ManjaApp.Web.Utils;
 
 namespace ManjaApp.Web.Controllers
 {
     public class ManjasController : Controller
     {
         private readonly IManjaService _manjaService;
-        
-        public ManjasController(IManjaService manjaService)
+        private readonly IWebHostEnvironment _environment;
+        public ManjasController(IManjaService manjaService, IWebHostEnvironment environment)
         {
             _manjaService = manjaService;
+            _environment = environment;
         }
 
         // GET: Manjas
@@ -57,16 +59,21 @@ namespace ManjaApp.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ManjaCreateEditDTO manja)
+        public async Task<IActionResult> Create(ManjaCreateEditViewModel manja)
         {
             if (ModelState.IsValid)
             {
+                if (manja.PictureUpload != null && manja.PictureUpload.Length > 0)
+                {
+                    var newName = await FileUpload.UploadAsync(manja.PictureUpload, _environment.WebRootPath);
+                    manja.Picture = newName;
+                }
                 await _manjaService.AddManjaAsync(manja);
                 return RedirectToAction(nameof(Index));
             }
             return View(manja);
         }
-
+         
 
         // GET: Manjas/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -81,7 +88,14 @@ namespace ManjaApp.Web.Controllers
             {
                 return NotFound();
             }
-            return View(manja);
+            return View(new ManjaCreateEditViewModel()
+            {
+                Id = manja.Id,
+                Title = manja.Title,
+                Duration = manja.Duration,
+                Instructions = manja.Instructions,
+                Picture = manja.Picture
+            });
         }
 
         // POST: Manjas/Edit/5
@@ -89,7 +103,7 @@ namespace ManjaApp.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, ManjaCreateEditDTO manja)
+        public async Task<IActionResult> Edit(int id, ManjaCreateEditViewModel manja)
         {
             if (id != manja.Id)
             {
@@ -98,6 +112,11 @@ namespace ManjaApp.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                if (manja.PictureUpload != null && manja.PictureUpload.Length > 0)
+                {
+                    var newName = await FileUpload.UploadAsync(manja.PictureUpload, _environment.WebRootPath);
+                    manja.Picture = newName;
+                }
                 try
                 {
                     await _manjaService.UpdateManjaAsync(manja);

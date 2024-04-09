@@ -1,4 +1,4 @@
-﻿@model Services.DTOs.ManjaDTO
+﻿@model ManjaApp.Web.Models.ManjaCreateEditViewModel
 @{
     ViewData["Title"] = "Edit";
 }
@@ -9,7 +9,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
@@ -27,9 +27,12 @@
                 <span asp-validation-for="Instructions" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Picture" class="control-label"></label>
-                <input asp-for="Picture" class="form-control" />
-                <span asp-validation-for="Picture" class="text-danger"></span>
+                <input asp-for="Picture" type="hidden" value="-" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="PictureUpload" class="control-label"></label>
+                <input asp-for="PictureUpload" type="file" class="form-control-file" />
+                <span asp-validation-for="PictureUpload" class="text-danger"></span>
             </div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">

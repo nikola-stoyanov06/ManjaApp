@@ -9,46 +9,21 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Duration)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Instructions)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Picture)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Duration)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Instructions)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Picture)
-            </td>
-            
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="d-flex flex-wrap justify-content-between">
+    @foreach (var item in Model)
+    {
+        <div class="card col-3 my-3 p-3 mx-3">
+            <div class="img-thumbnail">
+                <img class="img-thumbnail" 
+                    src="~/uploads/@item.Picture" alt="@item.Title">
+            </div>
+            <a asp-action="Details" asp-route-id="@item.Id">@item.Title</a>
+            <div class="d-flex justify-content-around my-3">
+                <a class="btn-warning btn" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                <a class="btn-info btn" asp-action="Details" asp-route-id="@item.Id"> Details </a>
+                <a class="btn-danger btn" asp-action="Delete" asp-route-id="@item.Id"> Delete </a>
+            </div>
+        </div>
+        
+    }
+</div>
