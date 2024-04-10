@@ -12,5 +12,6 @@ namespace Services.DTOs
         public int Duration { get; set; }
         public string Instructions { get; set; }
         public string Picture { get; set; }
+        public CategoryDTO Category { get; set; }
     }
 }

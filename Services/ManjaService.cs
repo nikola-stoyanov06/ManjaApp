@@ -10,14 +10,20 @@ namespace Services
     {
         private readonly ICrudRepository<Manja> _manjaRepository;
         private readonly IMapper _mapper;
-        public ManjaService(ICrudRepository<Manja> manjaRepository, IMapper mapper)
+        private readonly ICrudRepository<Category>
+            _categoryRepository;
+        public ManjaService(ICrudRepository<Manja> manjaRepository, IMapper mapper, 
+            ICrudRepository<Category> categoryRepository)
         {
             _mapper = mapper;
             _manjaRepository = manjaRepository;
+            _categoryRepository = categoryRepository;
         }
         public async Task AddManjaAsync(ManjaCreateEditDTO model)
         {
             var manja = _mapper.Map<Manja>(model);
+            var category = await _categoryRepository.GetByIdAsync(model.CategoryId);
+            manja.Category = category;
             await _manjaRepository.AddAsync(manja);
         }
         

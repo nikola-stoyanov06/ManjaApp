@@ -19,7 +19,6 @@ namespace ManjaApp.Web
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(connectionString);
-                
             });
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -29,6 +28,8 @@ namespace ManjaApp.Web
             builder.Services.AddTransient(typeof(ICrudRepository<>), typeof(CrudRepository<>));
             builder.Services.AddTransient<IManjaService, ManjaService>();
             builder.Services.AddTransient<ICommentService, CommentService>();
+            builder.Services.AddTransient<ICategoryService, CategoryService>();
+
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             var app = builder.Build();
 

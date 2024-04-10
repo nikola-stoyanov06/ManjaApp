@@ -27,13 +27,20 @@
                 <span asp-validation-for="Instructions" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input asp-for="Picture" type="hidden" value="-" class="form-control" />
+                <label asp-for="CategoryId" class="control-label"></label>
+                <select asp-for="CategoryId" class="form-control" asp-items="@(new SelectList(ViewBag.Categories, "Id", "Title"))"></select>
             </div>
             <div class="form-group">
+                <img class="img-thumbnail"
+                     src="~/uploads/@Model.Picture" alt="@Model.Title">
                 <label asp-for="PictureUpload" class="control-label"></label>
                 <input asp-for="PictureUpload" type="file" class="form-control-file" />
                 <span asp-validation-for="PictureUpload" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <input asp-for="Picture" type="hidden" value="@Model.Picture" class="form-control"/>
+            </div>
+            
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

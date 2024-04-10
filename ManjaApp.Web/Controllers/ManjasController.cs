@@ -18,10 +18,13 @@ namespace ManjaApp.Web.Controllers
     {
         private readonly IManjaService _manjaService;
         private readonly IWebHostEnvironment _environment;
-        public ManjasController(IManjaService manjaService, IWebHostEnvironment environment)
+        private readonly ICategoryService _categoryService;
+        public ManjasController(IManjaService manjaService, IWebHostEnvironment environment, 
+            ICategoryService categoryService)
         {
             _manjaService = manjaService;
             _environment = environment;
+            _categoryService = categoryService;
         }
 
         // GET: Manjas
@@ -48,8 +51,10 @@ namespace ManjaApp.Web.Controllers
         }
 
         // GET: Manjas/Create
-        public IActionResult Create()
-        { 
+        public async Task<IActionResult> Create()
+        {
+            var categories = await _categoryService.GetCategoriesAsync(); // Replace with your method to retrieve categories
+            ViewBag.Categories = categories;
             return View();
         }
         
@@ -68,6 +73,7 @@ namespace ManjaApp.Web.Controllers
                     var newName = await FileUpload.UploadAsync(manja.PictureUpload, _environment.WebRootPath);
                     manja.Picture = newName;
                 }
+
                 await _manjaService.AddManjaAsync(manja);
                 return RedirectToAction(nameof(Index));
             }
@@ -83,11 +89,13 @@ namespace ManjaApp.Web.Controllers
                 return NotFound();
             }
 
-            var manja = await _manjaService.GetManjaByIdAsync(id.Value);
+            var manja = await _manjaService.GetManjaByIdEditAsync(id.Value);
             if (manja == null)
             {
                 return NotFound();
             }
+            var categories = await _categoryService.GetCategoriesAsync(); // Replace with your method to retrieve categories
+            ViewBag.Categories = categories;
             return View(new ManjaCreateEditViewModel()
             {
                 Id = manja.Id,
@@ -117,6 +125,7 @@ namespace ManjaApp.Web.Controllers
                     var newName = await FileUpload.UploadAsync(manja.PictureUpload, _environment.WebRootPath);
                     manja.Picture = newName;
                 }
+                
                 try
                 {
                     await _manjaService.UpdateManjaAsync(manja);
