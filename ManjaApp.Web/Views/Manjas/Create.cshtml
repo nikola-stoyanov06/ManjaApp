@@ -1,16 +1,13 @@
 ﻿@model ManjaApp.Web.Models.ManjaCreateEditViewModel
 
-@{
-    ViewData["Title"] = "Create";
-}
-
 <h1>Create</h1>
-
+    
 <h4>Manja</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create" enctype="multipart/form-data">
+            @Html.ValidationSummary(true)
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
@@ -29,7 +26,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="@(new SelectList(ViewBag.Categories,"Id", "Title"))"></select>
+                <select asp-for="CategoryId" asp-items=@(new SelectList(ViewBag.Categories, "Id", "Title"))></select>
             </div>
             <div class="form-group">
                 <input asp-for="Picture" type ="hidden" value="-" class="form-control" />

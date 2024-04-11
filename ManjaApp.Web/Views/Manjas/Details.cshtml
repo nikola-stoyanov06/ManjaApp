@@ -28,12 +28,10 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Instructions)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Picture)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Picture)
-        </dd>
+        <div class="img-thumbnail">
+            <img class="img-thumbnail"
+                 src="~/uploads/@Model.Picture" alt="@Model.Title">
+        </div>
         <button onclick="location.href='@Url.Action("Create", "Comments")'">Add Comment</button>
         
     </dl>

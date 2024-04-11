@@ -11,20 +11,28 @@ using Services.Abstractions;
 using Services.DTOs;
 using ManjaApp.Web.Models;
 using ManjaApp.Web.Utils;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace ManjaApp.Web.Controllers
 {
+    
     public class ManjasController : Controller
     {
         private readonly IManjaService _manjaService;
         private readonly IWebHostEnvironment _environment;
         private readonly ICategoryService _categoryService;
-        public ManjasController(IManjaService manjaService, IWebHostEnvironment environment, 
-            ICategoryService categoryService)
+        private readonly UserManager<IdentityUser> _userManager;
+        public ManjasController(IManjaService manjaService, 
+            IWebHostEnvironment environment, 
+            ICategoryService categoryService,
+            UserManager<IdentityUser> userManager)
         {
             _manjaService = manjaService;
             _environment = environment;
             _categoryService = categoryService;
+            _userManager = userManager;
         }
 
         // GET: Manjas
@@ -50,10 +58,10 @@ namespace ManjaApp.Web.Controllers
             return View(manja);
         }
 
-        // GET: Manjas/Create
+        [Authorize]
         public async Task<IActionResult> Create()
         {
-            var categories = await _categoryService.GetCategoriesAsync(); // Replace with your method to retrieve categories
+            var categories = await _categoryService.GetCategoriesAsync();
             ViewBag.Categories = categories;
             return View();
         }
@@ -64,16 +72,17 @@ namespace ManjaApp.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create(ManjaCreateEditViewModel manja)
         {
             if (ModelState.IsValid)
             {
+                manja.UserId = _userManager.GetUserId(User);
                 if (manja.PictureUpload != null && manja.PictureUpload.Length > 0)
                 {
                     var newName = await FileUpload.UploadAsync(manja.PictureUpload, _environment.WebRootPath);
                     manja.Picture = newName;
                 }
-
                 await _manjaService.AddManjaAsync(manja);
                 return RedirectToAction(nameof(Index));
             }
@@ -94,7 +103,7 @@ namespace ManjaApp.Web.Controllers
             {
                 return NotFound();
             }
-            var categories = await _categoryService.GetCategoriesAsync(); // Replace with your method to retrieve categories
+            var categories = await _categoryService.GetCategoriesAsync(); 
             ViewBag.Categories = categories;
             return View(new ManjaCreateEditViewModel()
             {

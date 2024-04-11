@@ -1,4 +1,5 @@
 using ManjaApp.Data.Data;
+using ManjaApp.Data.Entities;
 using ManjaApp.Data.Repositories;
 using ManjaApp.Data.Repositories.Abstractions;
 using Microsoft.AspNetCore.Identity;
@@ -10,7 +11,7 @@ namespace ManjaApp.Web
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +23,8 @@ namespace ManjaApp.Web
             });
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
             builder.Services.AddTransient(typeof(ICrudRepository<>), typeof(CrudRepository<>));
@@ -56,7 +58,35 @@ namespace ManjaApp.Web
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
-
+            using (var scope = app.Services.CreateScope())
+            {
+                var roleManager = scope.ServiceProvider.
+                    GetRequiredService<RoleManager<IdentityRole>>();
+                var roles = new[]
+                {
+                    "Admin", "Member"
+                };
+                foreach (var role in roles)
+                {
+                    if (!await roleManager.RoleExistsAsync(role))
+                        await roleManager.CreateAsync(new IdentityRole(role));
+                }
+            }
+            using (var scope = app.Services.CreateScope())
+            {
+                var userManager = scope.ServiceProvider.
+                    GetRequiredService<UserManager<IdentityUser>>();
+                string email = "ManjaBoss123@admin.com";
+                string password = "Admin_123";
+                if (await userManager.FindByEmailAsync(email) == null)
+                {
+                    var user = new IdentityUser();
+                    user.UserName = email;
+                    user.Email = email;
+                    await userManager.CreateAsync(user, password);
+                    await userManager.AddToRoleAsync(user, "Admin");
+                }
+            }
             app.Run();
         }
     }

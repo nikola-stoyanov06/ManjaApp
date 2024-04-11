@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,5 +14,6 @@ namespace Services.DTOs
         public string Instructions { get; set; }
         public string Picture { get; set; }
         public CategoryDTO Category { get; set; }
+        public IdentityUser User  { get; set; }
     }
 }

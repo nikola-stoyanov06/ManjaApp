@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ManjaApp.Data.Entities;
 using ManjaApp.Data.Repositories.Abstractions;
+using Microsoft.AspNetCore.Identity;
 using Services.Abstractions;
 using Services.DTOs;
 
@@ -12,6 +13,7 @@ namespace Services
         private readonly IMapper _mapper;
         private readonly ICrudRepository<Category>
             _categoryRepository;
+        
         public ManjaService(ICrudRepository<Manja> manjaRepository, IMapper mapper, 
             ICrudRepository<Category> categoryRepository)
         {
@@ -24,6 +26,7 @@ namespace Services
             var manja = _mapper.Map<Manja>(model);
             var category = await _categoryRepository.GetByIdAsync(model.CategoryId);
             manja.Category = category;
+
             await _manjaRepository.AddAsync(manja);
         }
         
@@ -60,6 +63,8 @@ namespace Services
         public async Task UpdateManjaAsync(ManjaCreateEditDTO model)
         {
             var manja = _mapper.Map<Manja>(model);
+            var category = await _categoryRepository.GetByIdAsync(model.CategoryId);
+            manja.Category = category;
             await _manjaRepository.UpdateAsync(manja);
         }
     }

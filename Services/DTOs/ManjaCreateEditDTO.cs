@@ -13,5 +13,6 @@ namespace Services.DTOs
         public string Instructions { get; set; }
         public string Picture { get; set; }
         public int CategoryId { get; set; }
+        public string UserId { get; set; }
     }
 }
