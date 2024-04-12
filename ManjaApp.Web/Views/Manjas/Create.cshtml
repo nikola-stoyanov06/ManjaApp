@@ -31,11 +31,13 @@
             <div class="form-group">
                 <input asp-for="Picture" type ="hidden" value="-" class="form-control" />
             </div>
+            
             <div class="form-group">
                 <label asp-for="PictureUpload" class="control-label"></label>
                 <input asp-for="PictureUpload" type="file" class="form-control-file" />
                 <span asp-validation-for="PictureUpload" class="text-danger"></span>
             </div>
+            <input type="hidden" asp-for="UserId">
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

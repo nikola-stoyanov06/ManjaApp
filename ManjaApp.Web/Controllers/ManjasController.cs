@@ -63,7 +63,10 @@ namespace ManjaApp.Web.Controllers
         {
             var categories = await _categoryService.GetCategoriesAsync();
             ViewBag.Categories = categories;
-            return View();
+            var user = await _userManager.GetUserAsync(User);
+            var model = new ManjaCreateEditViewModel();
+            model.UserId = user.Id;
+            return View(model);
         }
         
 
@@ -76,7 +79,7 @@ namespace ManjaApp.Web.Controllers
         public async Task<IActionResult> Create(ManjaCreateEditViewModel manja)
         {
             if (ModelState.IsValid)
-            {
+            { 
                 manja.UserId = _userManager.GetUserId(User);
                 if (manja.PictureUpload != null && manja.PictureUpload.Length > 0)
                 {
@@ -86,11 +89,14 @@ namespace ManjaApp.Web.Controllers
                 await _manjaService.AddManjaAsync(manja);
                 return RedirectToAction(nameof(Index));
             }
+            var categories = await _categoryService.GetCategoriesAsync();
+            ViewBag.Categories = categories;
             return View(manja);
         }
-         
+
 
         // GET: Manjas/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -105,13 +111,17 @@ namespace ManjaApp.Web.Controllers
             }
             var categories = await _categoryService.GetCategoriesAsync(); 
             ViewBag.Categories = categories;
+            var user = await _userManager.GetUserAsync(User);
+
             return View(new ManjaCreateEditViewModel()
             {
                 Id = manja.Id,
                 Title = manja.Title,
                 Duration = manja.Duration,
                 Instructions = manja.Instructions,
-                Picture = manja.Picture
+                Picture = manja.Picture,
+                UserId = user.Id,
+                CategoryId = manja.CategoryId
             });
         }
 
@@ -120,6 +130,7 @@ namespace ManjaApp.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, ManjaCreateEditViewModel manja)
         {
             if (id != manja.Id)
@@ -129,11 +140,17 @@ namespace ManjaApp.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                manja.UserId = _userManager.GetUserId(User);
                 if (manja.PictureUpload != null && manja.PictureUpload.Length > 0)
                 {
                     var newName = await FileUpload.UploadAsync(manja.PictureUpload, _environment.WebRootPath);
                     manja.Picture = newName;
                 }
+                else
+                {
+                    var oldManja = await _manjaService.GetManjaByIdEditAsync(manja.Id);
+                    manja.Picture = oldManja.Picture;
+                }   
                 
                 try
                 {
@@ -152,6 +169,8 @@ namespace ManjaApp.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            var categories = await _categoryService.GetCategoriesAsync();
+            ViewBag.Categories = categories;
             return View(manja);
         }
 

@@ -9,12 +9,12 @@ namespace Services
 {
     public class ManjaService : IManjaService
     {
-        private readonly ICrudRepository<Manja> _manjaRepository;
+        private readonly IManjaRepository _manjaRepository;
         private readonly IMapper _mapper;
         private readonly ICrudRepository<Category>
             _categoryRepository;
         
-        public ManjaService(ICrudRepository<Manja> manjaRepository, IMapper mapper, 
+        public ManjaService(IManjaRepository manjaRepository, IMapper mapper, 
             ICrudRepository<Category> categoryRepository)
         {
             _mapper = mapper;
@@ -65,7 +65,7 @@ namespace Services
             var manja = _mapper.Map<Manja>(model);
             var category = await _categoryRepository.GetByIdAsync(model.CategoryId);
             manja.Category = category;
-            await _manjaRepository.UpdateAsync(manja);
+            await _manjaRepository.UpdateManja(manja, category);
         }
     }
 }

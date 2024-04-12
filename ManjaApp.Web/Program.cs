@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Services;
 using Services.Abstractions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ManjaApp.Web
 {
@@ -20,6 +21,7 @@ namespace ManjaApp.Web
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(connectionString);
+                options.UseLazyLoadingProxies();
             });
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -31,6 +33,7 @@ namespace ManjaApp.Web
             builder.Services.AddTransient<IManjaService, ManjaService>();
             builder.Services.AddTransient<ICommentService, CommentService>();
             builder.Services.AddTransient<ICategoryService, CategoryService>();
+            builder.Services.AddTransient<IManjaRepository, ManjaRepository>();
 
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             var app = builder.Build();
