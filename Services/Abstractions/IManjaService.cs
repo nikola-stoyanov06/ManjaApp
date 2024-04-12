@@ -13,7 +13,8 @@ namespace Services.Abstractions
         Task<List<ManjaDTO>> GetManjasAsync();
         Task<ManjaDTO> GetManjaByIdAsync(int id);
         Task<ManjaCreateEditDTO> GetManjaByIdEditAsync(int id);
-        Task<List<ManjaDTO>> GetManjasByNameAsync(string name);
+        Task<List<ManjaDTO>> GetManjasByCategoryIdAsync(int id);
+
         Task AddManjaAsync (ManjaCreateEditDTO model);
         Task DeleteManjaByIdAsync (int id);
         Task UpdateManjaAsync(ManjaCreateEditDTO model);

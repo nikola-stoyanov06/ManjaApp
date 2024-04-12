@@ -54,9 +54,9 @@ namespace Services
             return _mapper.Map<List<ManjaDTO>>(manjas);
         }
 
-        public async Task<List<ManjaDTO>> GetManjasByNameAsync(string name)
+        public async Task<List<ManjaDTO>> GetManjasByCategoryIdAsync(int id)
         {
-            var manjas = (await _manjaRepository.GetAsync(item => item.Title == name)).ToList();
+            var manjas = (await _manjaRepository.GetAsync(item => item.Category.Id == id)).ToList();
             return _mapper.Map<List<ManjaDTO>>(manjas);
         }
 

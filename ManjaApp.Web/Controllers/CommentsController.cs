@@ -56,7 +56,7 @@ namespace ManjaApp.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Content,Rating,Id")] CommentDTO comment)
+        public async Task<IActionResult> Create(CommentDTO comment)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +87,7 @@ namespace ManjaApp.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Content,Rating,Id")] CommentDTO comment)
+        public async Task<IActionResult> Edit(int id, CommentDTO comment)
         {
             if (id != comment.Id)
             {

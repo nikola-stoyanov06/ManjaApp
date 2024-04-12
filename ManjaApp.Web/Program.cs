@@ -36,6 +36,8 @@ namespace ManjaApp.Web
             builder.Services.AddTransient<IManjaRepository, ManjaRepository>();
 
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

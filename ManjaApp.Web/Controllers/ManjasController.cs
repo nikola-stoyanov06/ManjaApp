@@ -112,7 +112,6 @@ namespace ManjaApp.Web.Controllers
             var categories = await _categoryService.GetCategoriesAsync(); 
             ViewBag.Categories = categories;
             var user = await _userManager.GetUserAsync(User);
-
             return View(new ManjaCreateEditViewModel()
             {
                 Id = manja.Id,
@@ -146,11 +145,7 @@ namespace ManjaApp.Web.Controllers
                     var newName = await FileUpload.UploadAsync(manja.PictureUpload, _environment.WebRootPath);
                     manja.Picture = newName;
                 }
-                else
-                {
-                    var oldManja = await _manjaService.GetManjaByIdEditAsync(manja.Id);
-                    manja.Picture = oldManja.Picture;
-                }   
+                
                 
                 try
                 {
@@ -167,7 +162,7 @@ namespace ManjaApp.Web.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Categories", new { id = manja.CategoryId });
             }
             var categories = await _categoryService.GetCategoriesAsync();
             ViewBag.Categories = categories;
