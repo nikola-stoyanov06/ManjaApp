@@ -72,7 +72,7 @@ namespace ManjaApp.Web.Controllers
             if (ModelState.IsValid)
             {
                 await _commentService.AddCommentAsync(comment);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Manjas", new { id = comment.ManjaId });
             }
             return View(comment);
         }

@@ -1,20 +1,92 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="text-center">
-                <h1 class="display-4">Welcome to our Manja App</h1>
-                <p>Explore delicious manjas and discover new flavors!</p>
-            </div>
-            <div class="text-center mt-4">
-                <div class="img-thumbnail">
-                    <img class="img-thumbnail"
-                         src="~/Photos/Salads.jpg">
-                <a href="/Categories/Details/4" class="btn btn-lg btn-primary">View Salads</a>
-            </div>
-        </div>
-    </div>
+<title>Manja</title>
+
+<link rel="stylesheet" type="text/css" href="moe.css" />
+
+
+</head>
+<body>
+<div id="wrapper">
+	<div id="header">
+		<div id="logo">
+			<h1><a href="index.html">Manja</a></h1>
+		</div>
+	</div>
+	<div id="menu">
+		<ul>
+			<li class="first">
+				<h1>Welcome to Manja</h1>
+        		<p>This is a cooking site where you can post and watch other people recipes! Enjoy!</p>					
+		    </li>          
+			<a href="/Identity/Account/Login" class="button1">Login</a>
+			<a href="/Identity/Account/Register" class="button2">Register</a>	
+        <ul>       
+		<br class="clearfix" />
+	</div>
+
+
+
+	<div id="page">  
+		<div id="content">
+			
+
+			<div class="box" id="content-box1">
+				<ul class="section-list1">
+					<li class="first">
+						<img class="pic alignleft" src="~/Photos/Appetizers.jpg" width="300" height="200" alt="" />
+                        <a href="/Categories/Details/1" class="button">Appetizers</a>
+					</li>
+					<li>
+						<img class="pic alignleft" src="~/Photos/Beverages.jpg" width="300" height="200" alt="" />
+						<a href="/Categories/Details/6" class="button">Beverages</a>
+					</li>
+					<li class="last">
+						<img class="pic alignleft" src="~/Photos/Bread.jpg" width="300" height="200" alt="" />
+						<a href="/Categories/Details/7" class="button">Bread and baked goods</a>
+					</li>
+					<li class="last">
+						<img class="pic alignleft" src="~/Photos/Desserts.jpg" width="300" height="200" alt="" />
+						<a href="/Categories/Details/3" class="button">Desserts</a>
+					</li>
+				</ul>
+			</div>
+
+
+			<div class="box" id="content-box2">
+				<ul class="section-list1">
+					<li class="first">
+						<img class="pic alignleft" src="~/Photos/MainCourses.jpg" width="300" height="200" alt="" />
+						<a href="/Categories/Details/2" class="button">Main Courses</a>
+					</li>
+					<li>
+						<img class="pic alignleft" src="~/Photos/Salads.jpg" width="300" height="200" alt="" />
+						<a href="/Categories/Details/4" class="button">Salads</a>
+					</li>
+					<li class="last">
+						<img class="pic alignleft" src="~/Photos/Sides.jpg" width="300" height="200" alt="" />
+						<a href="/Categories/Details/8" class="button">Sides</a>
+					</li>
+					<li class="last">
+						<img class="pic alignleft" src="~/Photos/SoupsandStews.jpg" width="300" height="200" alt="" />
+						<a href="/Categories/Details/5" class="button">Soups and Stews</a>
+					</li>
+				</ul>
+			</div>
+
+
+			<br class="clearfix" />
+		</div>
+		
+		<br class="clearfix" />
+	</div>
+	
+
+
 </div>
+
+
+</body>
+</html>
