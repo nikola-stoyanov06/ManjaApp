@@ -1,4 +1,4 @@
-﻿@model Services.DTOs.ManjaDTO
+﻿@model Services.DTOs.ManjaAddCommentDTO
 
 @{
     ViewData["Title"] = "Details";
@@ -32,11 +32,49 @@
             <img class="img-thumbnail"
                  src="~/uploads/@Model.Picture" alt="@Model.Title">
         </div>
-        <button onclick="location.href='@Url.Action("Create", "Comments")'">Add Comment</button>
+        <a href=/Categories/Create>AddComment</a>
         
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a href=/Categories/Details/@Model.Category.Id>Back to List</a>
+    <h1>Comments</h1>
+@foreach (var item in Model.Comments)
+{
+    <dl class="row">
+        <dt class="col-sm-12">
+            @item.Content
+        </dt>
+        <dt class="col-sm-2">
+            @item.Rating
+        </dt>
+        <dd class="col-sm-10">
+            @item.User.UserName
+        </dd>
+    </dl>
+}
+</div>
+<div>
+    <form asp-action="Create" asp-controller="Comments">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Comment.Content" class="control-label"></label>
+            <input asp-for="Comment.Content" class="form-control" />
+            <span asp-validation-for="Comment.Content" class="text-danger"></span>
+        </div>
+        <input type="hidden" asp-for="Comment.UserId">
+        <input type="hidden" asp-for="Comment.ManjaId" value="@Model.Id" />
+        <div class="form-group">
+            <label asp-for="Comment.Rating" class="control-label"></label>
+            <input asp-for="Comment.Rating" class="form-control" />
+            <span asp-validation-for="Comment.Rating" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+<div>
+        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
 </div>

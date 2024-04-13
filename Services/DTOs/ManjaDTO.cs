@@ -15,5 +15,6 @@ namespace Services.DTOs
         public string Picture { get; set; }
         public CategoryDTO Category { get; set; }
         public IdentityUser User  { get; set; }
+        public List<CommentDTO>? Comments { get; set; }
     }
 }

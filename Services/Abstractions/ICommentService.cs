@@ -11,9 +11,10 @@ namespace Services.Abstractions
     {
         Task<List<CommentDTO>> GetCommentsAsync();
         Task<CommentDTO> GetCommentByIdAsync(int id);
+        Task<CommentCreateEditDTO> GetCommentByIdEditAsync(int id);
         Task<List<CommentDTO>> GetCommentsByRatingAsync(int rating);
-        Task AddCommentAsync(CommentDTO model);
+        Task AddCommentAsync(CommentCreateEditDTO model);
         Task DeleteCommentByIdAsync(int id);
-        Task UpdateCommentAsync(CommentDTO model);
+        Task UpdateCommentAsync(CommentCreateEditDTO model);
     }
 }

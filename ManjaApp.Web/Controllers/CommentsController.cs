@@ -10,19 +10,26 @@ using ManjaApp.Data.Entities;
 using Services.Abstractions;
 using Services;
 using Services.DTOs;
+using Microsoft.AspNetCore.Authorization;
+using ManjaApp.Web.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace ManjaApp.Web.Controllers
 {
+    [Authorize]
     public class CommentsController : Controller
     {
         private readonly ICommentService _commentService;
+        private readonly UserManager<AppUser> _userManager;
 
-        public CommentsController(ICommentService commentService)
+        public CommentsController(ICommentService commentService, UserManager<AppUser> userManager)
         {
             _commentService = commentService;
+            _userManager = userManager;
         }
 
         // GET: Comments
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             return View(await _commentService.GetCommentsAsync());
@@ -46,9 +53,12 @@ namespace ManjaApp.Web.Controllers
         }
 
         // GET: Comments/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var user = await _userManager.GetUserAsync(User);
+            var model = new CommentCreateEditDTO();
+            model.UserId = user.Id;
+            return View(model);
         }
 
         // POST: Comments/Create
@@ -56,8 +66,9 @@ namespace ManjaApp.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CommentDTO comment)
+        public async Task<IActionResult> Create(CommentCreateEditDTO comment)
         {
+            comment.UserId = _userManager.GetUserId(User);
             if (ModelState.IsValid)
             {
                 await _commentService.AddCommentAsync(comment);
@@ -87,7 +98,7 @@ namespace ManjaApp.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, CommentDTO comment)
+        public async Task<IActionResult> Edit(int id, CommentCreateEditDTO comment)
         {
             if (id != comment.Id)
             {

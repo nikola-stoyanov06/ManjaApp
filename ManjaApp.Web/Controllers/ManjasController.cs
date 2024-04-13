@@ -23,11 +23,11 @@ namespace ManjaApp.Web.Controllers
         private readonly IManjaService _manjaService;
         private readonly IWebHostEnvironment _environment;
         private readonly ICategoryService _categoryService;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<AppUser> _userManager;
         public ManjasController(IManjaService manjaService, 
             IWebHostEnvironment environment, 
             ICategoryService categoryService,
-            UserManager<IdentityUser> userManager)
+            UserManager<AppUser> userManager)
         {
             _manjaService = manjaService;
             _environment = environment;
@@ -36,6 +36,7 @@ namespace ManjaApp.Web.Controllers
         }
 
         // GET: Manjas
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             return View(await _manjaService.GetManjasAsync());
@@ -54,8 +55,18 @@ namespace ManjaApp.Web.Controllers
             {
                 return NotFound();
             }
+            var model = new ManjaAddCommentDTO()
+            {
+                Id = manja.Id,
+                Title = manja.Title,
+                Comments = manja.Comments,
+                Comment = new CommentCreateEditDTO()
+                {
+                    UserId = (await _userManager.GetUserAsync(User)).Id
+                }
+            };
 
-            return View(manja);
+            return View(model);
         }
 
         [Authorize]
@@ -87,13 +98,17 @@ namespace ManjaApp.Web.Controllers
                     manja.Picture = newName;
                 }
                 await _manjaService.AddManjaAsync(manja);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Categories", new { id = manja.CategoryId });
             }
             var categories = await _categoryService.GetCategoriesAsync();
             ViewBag.Categories = categories;
             return View(manja);
         }
-
+        [Authorize]
+        public async Task<IActionResult> AddComment()
+        {
+            return View();
+        }
 
         // GET: Manjas/Edit/5
         [Authorize]

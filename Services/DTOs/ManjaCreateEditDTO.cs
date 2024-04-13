@@ -14,5 +14,6 @@ namespace Services.DTOs
         public string Picture { get; set; }
         public int CategoryId { get; set; }
         public string UserId { get; set; }
+        public int? CommentsIds { get; set; }
     }
 }

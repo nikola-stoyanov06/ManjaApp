@@ -21,6 +21,12 @@ namespace Services
             _manjaRepository = manjaRepository;
             _categoryRepository = categoryRepository;
         }
+
+        public Task AddCommentAsync(CommentCreateEditDTO comment)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task AddManjaAsync(ManjaCreateEditDTO model)
         {
             var manja = _mapper.Map<Manja>(model);
@@ -29,6 +35,7 @@ namespace Services
 
             await _manjaRepository.AddAsync(manja);
         }
+
         
         public async Task DeleteManjaByIdAsync(int id)
         {
@@ -57,6 +64,12 @@ namespace Services
         public async Task<List<ManjaDTO>> GetManjasByCategoryIdAsync(int id)
         {
             var manjas = (await _manjaRepository.GetAsync(item => item.Category.Id == id)).ToList();
+            return _mapper.Map<List<ManjaDTO>>(manjas);
+        }
+
+        public async Task<List<ManjaDTO>> GetManjasByUserIdAsync(string id)
+        {
+            var manjas = (await _manjaRepository.GetAsync(item => item.UserId == id)).ToList();
             return _mapper.Map<List<ManjaDTO>>(manjas);
         }
 

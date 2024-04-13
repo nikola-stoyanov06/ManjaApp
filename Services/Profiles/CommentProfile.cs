@@ -15,6 +15,8 @@ namespace Services.Profiles
         {
             CreateMap<Comment, CommentDTO>()
                 .ReverseMap();
+            CreateMap<Comment, CommentCreateEditDTO>()
+                .ReverseMap();
         }
     }
 }

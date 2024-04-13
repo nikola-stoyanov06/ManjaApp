@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Services.DTOs
 {
-    public class CommentDTO : BaseDTO
+    public class CommentCreateEditDTO : BaseDTO
     {
         public string Content { get; set; }
         public int Rating { get; set; }
-        public Manja Manja { get; set; }
-        public AppUser User { get; set; }
+        public int ManjaId { get; set; }
+        public string UserId { get; set; }
     }
 }

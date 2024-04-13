@@ -25,10 +25,11 @@ namespace ManjaApp.Web
             });
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddIdentity<AppUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultUI();
             builder.Services.AddControllersWithViews();
+            builder.Services.AddRazorPages();
             builder.Services.AddTransient(typeof(ICrudRepository<>), typeof(CrudRepository<>));
             builder.Services.AddTransient<IManjaService, ManjaService>();
             builder.Services.AddTransient<ICommentService, CommentService>();
@@ -56,7 +57,7 @@ namespace ManjaApp.Web
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
@@ -80,12 +81,12 @@ namespace ManjaApp.Web
             using (var scope = app.Services.CreateScope())
             {
                 var userManager = scope.ServiceProvider.
-                    GetRequiredService<UserManager<IdentityUser>>();
+                    GetRequiredService<UserManager<AppUser>>();
                 string email = "ManjaBoss123@admin.com";
                 string password = "Admin_123";
                 if (await userManager.FindByEmailAsync(email) == null)
                 {
-                    var user = new IdentityUser();
+                    var user = new AppUser();
                     user.UserName = email;
                     user.Email = email;
                     await userManager.CreateAsync(user, password);

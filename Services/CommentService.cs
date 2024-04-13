@@ -20,7 +20,7 @@ namespace Services
             _repository = repository;
             _mapper = mapper;
         }
-        public async Task AddCommentAsync(CommentDTO model)
+        public async Task AddCommentAsync(CommentCreateEditDTO model)
         {
             var comment = _mapper.Map<Comment>(model);
             await _repository.AddAsync(comment);
@@ -35,6 +35,11 @@ namespace Services
         {
             var comment = await _repository.GetByIdAsync(id);
             return _mapper.Map<CommentDTO>(comment);
+        }
+        public async Task<CommentCreateEditDTO> GetCommentByIdEditAsync(int id)
+        {
+            var comment = await _repository.GetByIdAsync(id);
+            return _mapper.Map<CommentCreateEditDTO>(comment);
         }
 
         public async Task<List<CommentDTO>> GetCommentsAsync()
@@ -51,7 +56,7 @@ namespace Services
             return _mapper.Map<List<CommentDTO>>(comments);
         }
 
-        public async Task UpdateCommentAsync(CommentDTO model)
+        public async Task UpdateCommentAsync(CommentCreateEditDTO model)
         {
             var comment = _mapper.Map<Comment>(model);
             await _repository.UpdateAsync(comment);
