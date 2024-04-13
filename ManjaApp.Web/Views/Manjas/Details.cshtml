@@ -1,79 +1,93 @@
-﻿@model Services.DTOs.ManjaAddCommentDTO
+﻿@using ManjaApp.Data.Entities;
+@using Microsoft.AspNetCore.Identity;
+@model Services.DTOs.ManjaAddCommentDTO
+@inject UserManager<AppUser> UserManager
 
 @{
-    ViewData["Title"] = "Details";
+	ViewData["Title"] = "Details";
 }
 
 <h1>Details</h1>
 
 <div>
-    <h4>Manja</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Duration)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Duration)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Instructions)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Instructions)
-        </dd>
-        <div class="img-thumbnail">
-            <img class="img-thumbnail"
-                 src="~/uploads/@Model.Picture" alt="@Model.Title">
-        </div>
-        
-    </dl>
-</div>
-<div>
-    <h1>Comments</h1>
-@foreach (var item in Model.Comments)
-{
-    <dl class="row">
-        <dt class="col-sm-12">
-            @item.Content
-        </dt>
-        <dt class="col-sm-2">
-            @item.Rating
-        </dt>
-        <dd class="col-sm-10">
-            @item.User.UserName
-        </dd>
-    </dl>
-}
-</div>
-<div>
-    <form asp-action="Create" asp-controller="Comments">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-            <label asp-for="Comment.Content" class="control-label"></label>
-            <input asp-for="Comment.Content" class="form-control" />
-            <span asp-validation-for="Comment.Content" class="text-danger"></span>
-        </div>
-        <input type="hidden" asp-for="Comment.UserId">
-        <input type="hidden" asp-for="Comment.ManjaId" value="@Model.Id" />
-        <div class="form-group">
-            <label asp-for="Comment.Rating" class="control-label"></label>
-            <input asp-for="Comment.Rating" class="form-control" />
-            <span asp-validation-for="Comment.Rating" class="text-danger"></span>
-        </div>
+	<h4>Manja</h4>
+	<hr />
+	<dl class="row">
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Title)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Title)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Duration)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Duration)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Instructions)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Instructions)
+		</dd>
+		<div class="img-thumbnail">
+			<img class="img-thumbnail"
+				 src="~/uploads/@Model.Picture" alt="@Model.Title">
+		</div>
 
-        <div class="form-group">
-            <input type="submit" value="Create" class="btn btn-primary" />
-        </div>
-    </form>
+	</dl>
+</div>
+<div>
+	@{
+		var current = (await UserManager.GetUserAsync(User)).Id;
+		if (current != null)
+		{
+			if (Model.UserId == current || User.IsInRole("Admin"))
+			{
+
+				<a asp-action="Edit" asp-route-id="@Model?.Id" class="button8">Edit</a>
+				<a asp-action="Delete" asp-route-id="@Model?.Id" class="button8">Delete</a>
+			}
+		}
+	}
+</div>
+<div>
+	<h1>Comments</h1>
+	@foreach (var item in Model.Comments)
+	{
+		<dl class="row">
+			<dt class="col-sm-12">
+				@item.User.UserName
+			</dt>
+			<dt class="col-sm-2">
+				@item.Rating
+			</dt>
+			<dd class="col-sm-10">
+				@item.Content
+			</dd>
+		</dl>
+	}
+</div>
+<div>
+	<form asp-action="Create" asp-controller="Comments">
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+		<div class="form-group">
+			<label asp-for="Comment.Content" class="control-label"></label>
+			<input asp-for="Comment.Content" class="form-control" />
+			<span asp-validation-for="Comment.Content" class="text-danger"></span>
+		</div>
+		<input type="hidden" asp-for="Comment.UserId">
+		<input type="hidden" asp-for="Comment.ManjaId" value="@Model.Id" />
+		<div class="form-group">
+			<label asp-for="Comment.Rating" class="control-label"></label>
+			<input asp-for="Comment.Rating" class="form-control" min="1" max="10" />
+			<span asp-validation-for="Comment.Rating" class="text-danger"></span>
+		</div>
+
+		<div class="form-group">
+			<input type="submit" value="Create" class="btn btn-primary" />
+		</div>
+	</form>
 </div>
 
-<div>
-        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
-</div>

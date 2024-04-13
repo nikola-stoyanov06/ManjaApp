@@ -27,6 +27,7 @@ namespace ManjaApp.Web
 
             builder.Services.AddIdentity<AppUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders()
                 .AddDefaultUI();
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();

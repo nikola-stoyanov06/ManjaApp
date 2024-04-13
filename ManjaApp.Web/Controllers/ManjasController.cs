@@ -59,6 +59,11 @@ namespace ManjaApp.Web.Controllers
             {
                 Id = manja.Id,
                 Title = manja.Title,
+				Duration = manja.Duration,
+				Instructions = manja.Instructions,
+				Picture = manja.Picture,
+				Category = manja.Category,
+                UserId = manja.UserId,
                 Comments = manja.Comments,
                 Comment = new CommentCreateEditDTO()
                 {
@@ -177,7 +182,7 @@ namespace ManjaApp.Web.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Details", "Categories", new { id = manja.CategoryId });
+                return RedirectToAction("Details", "Manjas", new { id = manja.Id });
             }
             var categories = await _categoryService.GetCategoriesAsync();
             ViewBag.Categories = categories;
@@ -213,7 +218,7 @@ namespace ManjaApp.Web.Controllers
                 await _manjaService.DeleteManjaByIdAsync(id);
             }
             
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", "Categories", new { id = manja.Category.Id });
         }
 
         private async Task<bool> ManjaExists(int id)
