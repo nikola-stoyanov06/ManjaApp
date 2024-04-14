@@ -7,37 +7,80 @@
 	ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Details</title>
+	<style>
+		.container {
+			max-width: 600px;
+			margin: 0 auto;
+			padding: 20px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+		}
 
-<div>
-	<h4>Manja</h4>
-	<hr />
-	<dl class="row">
-		<dt class="col-sm-2">
-			@Html.DisplayNameFor(model => model.Title)
-		</dt>
-		<dd class="col-sm-10">
-			@Html.DisplayFor(model => model.Title)
-		</dd>
-		<dt class="col-sm-2">
-			@Html.DisplayNameFor(model => model.Duration)
-		</dt>
-		<dd class="col-sm-10">
-			@Html.DisplayFor(model => model.Duration)
-		</dd>
-		<dt class="col-sm-2">
-			@Html.DisplayNameFor(model => model.Instructions)
-		</dt>
-		<dd class="col-sm-10">
-			@Html.DisplayFor(model => model.Instructions)
-		</dd>
-		<div class="img-thumbnail">
-			<img class="img-thumbnail"
-				 src="~/uploads/@Model.Picture" alt="@Model.Title">
+		.thumbnail {
+			max-width: 100%;
+			height: auto;
+		}
+
+		.row {
+			margin-bottom: 10px; /* Add spacing between rows */
+		}
+
+		dt {
+			font-weight: bold;
+		}
+
+		.comment {
+			border: 1px solid #ccc;
+			padding: 10px;
+			margin-bottom: 20px;
+		}
+
+		.user {
+			font-weight: bold;
+			margin-bottom: 5px;
+		}
+
+		.rating {
+			margin-bottom: 5px;
+		}
+
+		.content {
+			font-size: 16px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h1>Details</h1>
+		<hr />
+		<div>
+			<h4>Manja</h4>
+			<dl>
+				<div class="row">
+					<dt>Title:</dt>
+					<dd>@Model.Title</dd>
+				</div>
+				<div class="row">
+					<dt>Duration:</dt>
+					<dd>@Model.Duration</dd>
+				</div>
+				<div class="row">
+					<dt>Instructions:</dt>
+					<dd>@Model.Instructions</dd>
+				</div>
+			</dl>
+			<div>
+				<img class="thumbnail" src="~/uploads/@Model.Picture" alt="@Model.Title">
+			</div>
 		</div>
+	</div>
+</body>
+</html>
 
-	</dl>
-</div>
 <div>
 	@{
 		var current = (await UserManager.GetUserAsync(User)).Id;
@@ -51,22 +94,25 @@
 			}
 		}
 	}
+	<div class="mt-3">
+		<button onclick="window.location.href='@Url.Action("Details", "Categories", new { id = Model.Category.Id })'" class="btn btn-primary">Back to Category</button>
+	</div>
 </div>
 <div>
 	<h1>Comments</h1>
 	@foreach (var item in Model.Comments)
 	{
-		<dl class="row">
-			<dt class="col-sm-12">
+		<div class="comment">
+			<div class="user">
 				@item.User.UserName
-			</dt>
-			<dt class="col-sm-2">
-				@item.Rating
-			</dt>
-			<dd class="col-sm-10">
+			</div>
+			<div class="rating">
+				Rating: @item.Rating
+			</div>
+			<div class="content">
 				@item.Content
-			</dd>
-		</dl>
+			</div>
+		</div>
 	}
 </div>
 <div>
